@@ -26,15 +26,21 @@ export function Header() {
       const containerPlayer = document
         .getElementsByClassName("container-player")[0]
         .getElementsByClassName("img-play-pause")[0];
-      player.play();
-      music!.play();
-      containerPlayer.setAttribute("src", "/img/pause.svg");
-      setInterval(progressBar, 1000);
+
+      if (player.playing) {
+        player.play();
+        music!.play();
+        containerPlayer.setAttribute("src", "/img/pause.svg");
+        setInterval(progressBar, 1000);
+      } else {
+        player.pause();
+        music!.pause();
+        containerPlayer.setAttribute("src", "/img/play.svg");
+      }
     }
 
-    function proximaMusica() {
+    function nextMusic() {
       player.nextTrack();
-
       music?.setAttribute(
         "src",
         `${albums[player._albumIndex].tracks[player._trackIndex].url}`
@@ -44,7 +50,7 @@ export function Header() {
       progressBar();
     }
 
-    function voltarMusica() {
+    function prevMusic() {
       player.prevTrack();
       music?.setAttribute(
         "src",
@@ -123,13 +129,9 @@ export function Header() {
       .querySelector(".img-play-pause")!
       .addEventListener("click", playPauseMusic);
 
-    document
-      .querySelector(".img-prev")!
-      .addEventListener("click", voltarMusica);
+    document.querySelector(".img-prev")!.addEventListener("click", prevMusic);
 
-    document
-      .querySelector(".img-next")!
-      .addEventListener("click", proximaMusica);
+    document.querySelector(".img-next")!.addEventListener("click", nextMusic);
   });
 
   return html`

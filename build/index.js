@@ -179,23 +179,28 @@ function Header() {
         music.pause();
         containerPlayer.setAttribute("src", "/img/play.svg");
       }
-      console.log(player.playing);
     }
     function playPauseMusicNextPrev() {
       const containerPlayer = document.getElementsByClassName("container-player")[0].getElementsByClassName("img-play-pause")[0];
-      player.play();
-      music.play();
-      containerPlayer.setAttribute("src", "/img/pause.svg");
-      setInterval(progressBar, 1e3);
+      if (player.playing) {
+        player.play();
+        music.play();
+        containerPlayer.setAttribute("src", "/img/pause.svg");
+        setInterval(progressBar, 1e3);
+      } else {
+        player.pause();
+        music.pause();
+        containerPlayer.setAttribute("src", "/img/play.svg");
+      }
     }
-    function proximaMusica() {
+    function nextMusic() {
       player.nextTrack();
       music == null ? void 0 : music.setAttribute("src", `${albums_default[player._albumIndex].tracks[player._trackIndex].url}`);
       playPauseMusicNextPrev();
       reRender();
       progressBar();
     }
-    function voltarMusica() {
+    function prevMusic() {
       player.prevTrack();
       music == null ? void 0 : music.setAttribute("src", `${albums_default[player._albumIndex].tracks[player._trackIndex].url}`);
       playPauseMusicNextPrev();
@@ -206,7 +211,6 @@ function Header() {
       let progress = document.querySelector("progress");
       progress == null ? void 0 : progress.setAttribute(`value`, `${music == null ? void 0 : music.currentTime}`);
       progress == null ? void 0 : progress.setAttribute(`max`, `${music == null ? void 0 : music.duration}`);
-      console.log(music == null ? void 0 : music.currentTime);
     }
     function reRender() {
       for (let i = 0; albums_default.length > i; i++) {
@@ -247,8 +251,8 @@ function Header() {
       }
     }
     document.querySelector(".img-play-pause").addEventListener("click", playPauseMusic);
-    document.querySelector(".img-prev").addEventListener("click", voltarMusica);
-    document.querySelector(".img-next").addEventListener("click", proximaMusica);
+    document.querySelector(".img-prev").addEventListener("click", prevMusic);
+    document.querySelector(".img-next").addEventListener("click", nextMusic);
   });
   return html`
     <div class="containeralbums"></div>
